@@ -10,7 +10,7 @@ Texture::~Texture()
 	Free();
 }
 
-bool Texture::LoadFromFile(std::string path, SDL_Renderer* renderer, int positionX, int positionY, int framesCount, int width, int heigth)
+bool Texture::LoadTextureFromFile(std::string path, SDL_Renderer* renderer, int positionX, int positionY, int animationTilesCount, int width, int heigth)
 {
 	Free();
 
@@ -24,7 +24,7 @@ bool Texture::LoadFromFile(std::string path, SDL_Renderer* renderer, int positio
 	{
 		SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0xFF, 0xFF));
 
-		texture.reset(SDL_CreateTextureFromSurface(renderer, loadedSurface), [](SDL_Texture* texture) {});
+		texture = SDL_CreateTextureFromSurface(renderer, loadedSurface);
 		if (texture == NULL)
 		{
 			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
@@ -32,16 +32,16 @@ bool Texture::LoadFromFile(std::string path, SDL_Renderer* renderer, int positio
 		}
 		else
 		{
-			this->framesCount = framesCount;
-			this->currentFrame = framesCount;
-			spriteClips.resize(framesCount);
+			this->animationTilesCount = animationTilesCount;
+			this->currentAnimationTile = animationTilesCount;
+			tilesRectangle.resize(animationTilesCount);
 
-			for (int i = 0; i < framesCount; i++)
+			for (int i = 0; i < animationTilesCount; i++)
 			{
-				spriteClips[i].x = width * i;
-				spriteClips[i].y = 0;
-				spriteClips[i].w = width;
-				spriteClips[i].h = heigth;
+				tilesRectangle[i].x = width * i;
+				tilesRectangle[i].y = 0;
+				tilesRectangle[i].w = width;
+				tilesRectangle[i].h = heigth;
 			}
 		}
 
@@ -51,7 +51,7 @@ bool Texture::LoadFromFile(std::string path, SDL_Renderer* renderer, int positio
 	return true;
 }
 
-bool Texture::LoadFromRenderedText(std::string textureText, TTF_Font* font ,SDL_Color textColor, SDL_Renderer* renderer)
+bool Texture::PrepareTextureFromText(std::string textureText, TTF_Font* font ,SDL_Color textColor, SDL_Renderer* renderer)
 {
 	Free();
 
@@ -65,8 +65,8 @@ bool Texture::LoadFromRenderedText(std::string textureText, TTF_Font* font ,SDL_
 		}
 		else
 		{
-			spriteClips.resize(1);
-			spriteClips[0] = { 0, 0, textSurface->w, textSurface->h };
+			tilesRectangle.resize(1);
+			tilesRectangle[0] = { 0, 0, textSurface->w, textSurface->h };
 		}
 
 		SDL_FreeSurface(textSurface);
@@ -91,22 +91,22 @@ void Texture::Free()
 
 void Texture::Render(int x, int y, SDL_Renderer* renderer, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
-	SDL_Rect renderQuad = { x, y, spriteClips[currentFrame % framesCount].w, spriteClips[currentFrame % framesCount].h };
+	SDL_Rect renderQuad = { x, y, tilesRectangle[currentAnimationTile % animationTilesCount].w, tilesRectangle[currentAnimationTile % animationTilesCount].h };
 
-	SDL_RenderCopyEx(renderer, texture, &spriteClips[currentFrame % framesCount], &renderQuad, angle, center, flip);
+	SDL_RenderCopyEx(renderer, texture, &tilesRectangle[currentAnimationTile % animationTilesCount], &renderQuad, angle, center, flip);
 
-	if (framesCount > 1 && (delay++ % 8 == 0))
+	if (animationTilesCount > 1 && (delay++ % 8 == 0))
 	{
-		currentFrame++;
+		currentAnimationTile++;
 	}
 }
 
 int Texture::getWidth()
 {
-	return spriteClips[0].w;
+	return tilesRectangle[0].w;
 }
 
 int Texture::getHeight()
 {
-	return spriteClips[0].h;
+	return tilesRectangle[0].h;
 }

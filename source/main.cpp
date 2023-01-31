@@ -4,14 +4,17 @@
 #include <SDL_mixer.h>
 #include <stdio.h>
 #include <memory>
+#include "engine/Time.h"
+#include "engine/Texture.h"
 
-
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1240;
+const int SCREEN_HEIGHT = 800;
 
 SDL_Window* window;
 std::shared_ptr<SDL_Renderer> renderer; 
 TTF_Font* font = NULL;
+
+Time mainTimer;
 
 bool Init()
 {
@@ -33,6 +36,7 @@ bool Init()
 	}
 
 	renderer.reset(SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC), [](SDL_Renderer* renderer) { SDL_DestroyRenderer(renderer); });
+	//SDL_RenderSetScale(renderer.get(), 0.15, 0.15);
 	if (renderer == NULL)
 	{
 		printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
@@ -57,6 +61,8 @@ bool Init()
 		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 		return false;
 	}
+
+	mainTimer.InitTime();
 
 	return true;
 }
@@ -86,7 +92,8 @@ int main(int argc, char* args[])
 
 		return -1;
 	}
-	
+	Texture card;
+	card.LoadTextureFromFile("resource/Card texture packs/1/Spade01.png", renderer.get(), 0, 0, 1, 188, 291);
 	bool quit = false;
 	SDL_Event event;
 
@@ -96,9 +103,12 @@ int main(int argc, char* args[])
 		{
 			if (event.type == SDL_QUIT) { quit = true; }
 		}
+		mainTimer.UpdateTime();
 
-		SDL_SetRenderDrawColor(renderer.get(), 0x0, 0x0, 0x0, 0xFF);
+		SDL_SetRenderDrawColor(renderer.get(), 0x0, 0x0FF, 0x0, 0xFF);
 		SDL_RenderClear(renderer.get());
+
+		card.Render(0, 0, renderer.get());
 
 		SDL_RenderPresent(renderer.get());
 	}	
