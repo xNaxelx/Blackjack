@@ -139,10 +139,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\engine\GameObject.cpp" />
+    <ClCompile Include="source\engine\Observer.cpp" />
+    <ClCompile Include="source\engine\Text.cpp" />
+    <ClCompile Include="source\engine\Texture.cpp" />
+    <ClCompile Include="source\engine\Time.cpp" />
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\engine\GameObject.h" />
+    <ClInclude Include="source\engine\Observer.h" />
+    <ClInclude Include="source\engine\Text.h" />
     <ClInclude Include="source\engine\Texture.h" />
+    <ClInclude Include="source\engine\Time.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

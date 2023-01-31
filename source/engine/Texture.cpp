@@ -91,7 +91,7 @@ void Texture::Free()
 
 void Texture::Render(int x, int y, SDL_Renderer* renderer, double angle, SDL_Point* center, SDL_RendererFlip flip)
 {
-	SDL_Rect renderQuad = { x, y, tilesRectangle[currentAnimationTile % animationTilesCount].w, tilesRectangle[currentAnimationTile % animationTilesCount].h };
+	SDL_Rect renderQuad = { x, y, tilesRectangle[0].w, tilesRectangle[0].h };
 
 	SDL_RenderCopyEx(renderer, texture, &tilesRectangle[currentAnimationTile % animationTilesCount], &renderQuad, angle, center, flip);
 
