@@ -5,7 +5,7 @@
 
 class IObserver {
 public:
-    virtual void UpdateTexture(SDL_Renderer* renderer) {};
+    virtual void RenderTexture(SDL_Renderer* renderer) {};
     virtual void UpdateMove() {};
     virtual void HandleEvent(SDL_Event* event) {};
 };

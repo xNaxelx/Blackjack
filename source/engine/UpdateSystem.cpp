@@ -15,7 +15,7 @@ void UpdateSystem::NotifyUpdateTextures(SDL_Renderer* renderer)
     std::list<IObserver*>::iterator iterator = list_observer.begin();
     while (iterator != list_observer.end()) 
     {
-        (*iterator)->UpdateTexture(renderer);
+        (*iterator)->RenderTexture(renderer);
         ++iterator;
     }
 }

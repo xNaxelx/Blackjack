@@ -8,7 +8,7 @@ Text::Text(const char* file, int ptsize, int x, int y, std::string text, SDL_Ren
 	PrepareTextureFromText(text, font, SDL_Color{ 240, 240, 240 }, renderer);
 }
 
-void Text::UpdateTexture(SDL_Renderer* renderer)
+void Text::RenderTexture(SDL_Renderer* renderer)
 {
 	Render(x, y, renderer);
 }

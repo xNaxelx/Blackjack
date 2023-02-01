@@ -6,8 +6,9 @@
 #include <memory>
 #include "engine/Time.h"
 #include "engine/Texture.h"
+#include "gameplay/Card.h"
 
-const int SCREEN_WIDTH = 1240;
+const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 800;
 
 SDL_Window* window;
@@ -92,8 +93,13 @@ int main(int argc, char* args[])
 
 		return -1;
 	}
-	Texture card;
-	card.LoadTextureFromFile("resource/Card texture packs/1/Spade01.png", renderer.get(), 0, 0, 1, 188, 291);
+
+	Texture table;
+	table.LoadTextureFromFile("resource/table.png", renderer.get(), 1, SCREEN_WIDTH, SCREEN_HEIGHT);
+	Card::SetShirtTexture("resource/Card back textures/BackColor_Black.png", renderer.get(), 1, 188, 291);
+
+	Card card(CARD_SUIT_CLUB, CARD_RANK_10, 0, 0, 1, 188, 291, "resource/Card texture packs/1/Club01.png", renderer.get(), &mainTimer);
+
 	bool quit = false;
 	SDL_Event event;
 
@@ -102,13 +108,16 @@ int main(int argc, char* args[])
 		while (SDL_PollEvent(&event) != 0)
 		{
 			if (event.type == SDL_QUIT) { quit = true; }
+			if (event.button.state == SDL_PRESSED) { card.showShirt = !card.showShirt; }
 		}
 		mainTimer.UpdateTime();
 
-		SDL_SetRenderDrawColor(renderer.get(), 0x0, 0x0FF, 0x0, 0xFF);
-		SDL_RenderClear(renderer.get());
 
-		card.Render(0, 0, renderer.get());
+		SDL_SetRenderDrawColor(renderer.get(), 0x0, 0x0, 0x0, 0xFF);
+		SDL_RenderClear(renderer.get());
+		table.Render(0, 0, renderer.get());
+		
+		card.RenderTexture(renderer.get());
 
 		SDL_RenderPresent(renderer.get());
 	}	

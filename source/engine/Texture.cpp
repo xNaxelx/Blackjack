@@ -10,7 +10,7 @@ Texture::~Texture()
 	Free();
 }
 
-bool Texture::LoadTextureFromFile(std::string path, SDL_Renderer* renderer, int positionX, int positionY, int animationTilesCount, int width, int heigth)
+bool Texture::LoadTextureFromFile(std::string path, SDL_Renderer* renderer, int animationTilesCount, int width, int heigth)
 {
 	Free();
 

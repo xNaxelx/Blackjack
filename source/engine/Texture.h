@@ -15,7 +15,7 @@ public:
 	Texture();
 	~Texture();
 
-	bool LoadTextureFromFile(std::string path, SDL_Renderer* renderer, int positionX, int positionY, int animationTilesCount, int width, int heigth);
+	bool LoadTextureFromFile(std::string path, SDL_Renderer* renderer, int animationTilesCount, int width, int heigth);
 	bool PrepareTextureFromText(std::string textureText, TTF_Font* font, SDL_Color textColor, SDL_Renderer* renderer);
 	virtual void Render(int x, int y, SDL_Renderer* renderer, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 
