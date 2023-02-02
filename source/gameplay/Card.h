@@ -30,6 +30,7 @@ public:
 	Card(Suit suit, CardRank rank, int x, int y, int animFramesCount, int width, int height, std::string texturePath, SDL_Renderer* renderer, Time* timer);
 	
 	void RenderTexture(SDL_Renderer* renderer) override;
+	void UpdateMove() override;
 
 	static void SetShirtTexture(std::string path, SDL_Renderer* renderer, int animationTilesCount, int width, int heigth);
 
@@ -37,7 +38,7 @@ public:
 	CardRank GetRank();
 	bool showShirt = true;
 private:
-	static Texture* shirt;
+	static Texture* shirtTexture;
 
 	Suit suit = SUIT_NOT_INITIALISED;
 	CardRank rank = RANK_NOT_INITIALISED;

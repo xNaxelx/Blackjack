@@ -7,6 +7,7 @@
 #include "engine/Time.h"
 #include "engine/Texture.h"
 #include "gameplay/Card.h"
+#include "engine/UpdateSystem.h"
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 800;
@@ -16,6 +17,7 @@ std::shared_ptr<SDL_Renderer> renderer;
 TTF_Font* font = NULL;
 
 Time mainTimer;
+UpdateSystem updateSystem;
 
 bool Init()
 {
@@ -93,12 +95,15 @@ int main(int argc, char* args[])
 
 		return -1;
 	}
-
+	
 	Texture table;
 	table.LoadTextureFromFile("resource/table.png", renderer.get(), 1, SCREEN_WIDTH, SCREEN_HEIGHT);
 	Card::SetShirtTexture("resource/Card back textures/BackColor_Black.png", renderer.get(), 1, 188, 291);
 
 	Card card(CARD_SUIT_CLUB, CARD_RANK_10, 0, 0, 1, 188, 291, "resource/Card texture packs/1/Club01.png", renderer.get(), &mainTimer);
+	updateSystem.Attach(&card);
+	card.MoveTo(400, 400);
+	card.speed = 1000;
 
 	bool quit = false;
 	SDL_Event event;
@@ -116,6 +121,8 @@ int main(int argc, char* args[])
 		SDL_SetRenderDrawColor(renderer.get(), 0x0, 0x0, 0x0, 0xFF);
 		SDL_RenderClear(renderer.get());
 		table.Render(0, 0, renderer.get());
+
+		updateSystem.NotifyUpdateMove();
 		
 		card.RenderTexture(renderer.get());
 

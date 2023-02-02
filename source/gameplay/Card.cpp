@@ -11,7 +11,7 @@ void Card::RenderTexture(SDL_Renderer* renderer)
 {
 	if (showShirt)
 	{
-		shirt->Render(transform.x, transform.y, renderer);
+		shirtTexture->Render(transform.x, transform.y, renderer);
 	}
 	else
 	{
@@ -19,14 +19,20 @@ void Card::RenderTexture(SDL_Renderer* renderer)
 	}
 }
 
+
+void Card::UpdateMove()
+{
+	MoveUpdate();
+}
+
 void Card::SetShirtTexture(std::string path, SDL_Renderer* renderer, int animationTilesCount, int width, int heigth)
 {
-	if (shirt != NULL)
+	if (shirtTexture != NULL)
 	{
-		shirt->~Texture();
+		shirtTexture->~Texture();
 	}
-	shirt = new Texture();
-	shirt->LoadTextureFromFile(path, renderer, animationTilesCount, width, heigth);
+	shirtTexture = new Texture();
+	shirtTexture->LoadTextureFromFile(path, renderer, animationTilesCount, width, heigth);
 }
 
 Suit Card::GetSuit()
@@ -39,4 +45,4 @@ CardRank Card::GetRank()
 	return rank;
 }
 
-Texture* Card::shirt = NULL;
+Texture* Card::shirtTexture = NULL;

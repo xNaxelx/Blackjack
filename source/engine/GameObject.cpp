@@ -1,5 +1,5 @@
 #include "GameObject.h"
-
+	
 void GameObject::RenderTexture(SDL_Renderer* renderer)
 {
 	texture->Render(transform.x, transform.y, renderer);
@@ -27,10 +27,36 @@ GameObject::~GameObject()
 	texture->~Texture();
 }
 
-void GameObject::Move(float vectorX, float vectorY)
+void GameObject::MoveUpdate()
+{
+	if (isMoving)
+	{
+		double vectorLength = sqrt(pow(destination.x - transform.x, 2) + pow(destination.y - transform.y, 2));
+		if ( vectorLength * (float)timer->GetDeltaTime() > speed)
+		{
+			transform.x += ((destination.x - transform.x) / vectorLength) * speed * ((float)timer->GetDeltaTime() / 1000.0F);
+			transform.y += ((destination.y - transform.y) / vectorLength) * speed * ((float)timer->GetDeltaTime() / 1000.0F);
+		}
+		else
+		{
+			transform.x = destination.x;
+			transform.y = destination.y;
+		}
+	}
+}
+
+void GameObject::MoveDueToInput(float vectorX, float vectorY)
 {
 	transform.x += vectorX * speed * ((float)timer->GetDeltaTime() / 1000.0F);
 	transform.y += vectorY * speed * ((float)timer->GetDeltaTime() / 1000.0F);
+}
+
+void GameObject::MoveTo(int x, int y)
+{
+	destination.x = x;
+	destination.y = y;
+
+	isMoving = true;
 }
 
 int GameObject::GetX()
