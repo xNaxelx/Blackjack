@@ -59,6 +59,12 @@ void GameObject::MoveTo(int x, int y)
 	isMoving = true;
 }
 
+void GameObject::SetPosition(int x, int y)
+{
+	transform.x = x;
+	transform.y = y;
+}
+
 int GameObject::GetX()
 {
 	return transform.x;

@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <VcpkgInstalledDir>
+    </VcpkgInstalledDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -139,6 +143,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\gameplay\GameSystem.cpp" />
+    <ClCompile Include="source\gameplay\SkinSystem.cpp" />
+    <ClCompile Include="source\gameplay\CardDeck.cpp" />
     <ClCompile Include="source\gameplay\Card.cpp" />
     <ClCompile Include="source\engine\GameObject.cpp" />
     <ClCompile Include="source\engine\Observer.cpp" />
@@ -149,6 +156,9 @@
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\gameplay\GameSystem.h" />
+    <ClInclude Include="source\gameplay\SkinSystem.h" />
+    <ClInclude Include="source\gameplay\CardDeck.h" />
     <ClInclude Include="source\gameplay\Card.h" />
     <ClInclude Include="source\engine\GameObject.h" />
     <ClInclude Include="source\engine\Observer.h" />

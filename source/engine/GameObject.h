@@ -22,14 +22,15 @@ public:
 	void virtual MoveUpdate();
 	void virtual MoveDueToInput(float vectorX, float vectorY);
 	void virtual MoveTo(int x, int y);
+	void SetPosition(int x, int y);
 
 	int GetX();
 	int GetY();
 	int GetWidth();
 	int GetHeight();
 protected:
-	SDL_Rect transform;
-	SDL_Rect destination;
+	SDL_Rect transform = {0,0,0,0};
+	SDL_Rect destination = {0,0,0,0};
 	bool isMoving = false;
 
 	Texture* texture;
