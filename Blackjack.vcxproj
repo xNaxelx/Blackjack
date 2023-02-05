@@ -81,6 +81,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)include\SDL_mixer;$(ProjectDir)include\SDL2_ttf;$(ProjectDir)include\SDL2_image;$(ProjectDir)include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\engine\Button.cpp" />
     <ClCompile Include="source\gameplay\GameSystem.cpp" />
     <ClCompile Include="source\gameplay\SkinSystem.cpp" />
     <ClCompile Include="source\gameplay\CardDeck.cpp" />
@@ -156,6 +158,7 @@
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\engine\Button.h" />
     <ClInclude Include="source\gameplay\GameSystem.h" />
     <ClInclude Include="source\gameplay\SkinSystem.h" />
     <ClInclude Include="source\gameplay\CardDeck.h" />

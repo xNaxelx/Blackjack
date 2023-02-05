@@ -35,6 +35,15 @@ void Card::SetShirtTexture(std::string path, SDL_Renderer* renderer, int animati
 	shirtTexture->LoadTextureFromFile(path, renderer, animationTilesCount, width, heigth);
 }
 
+void Card::ChangeSkinTexture(std::string path, SDL_Renderer * renderer, int animationTilesCount, int width, int heigth)
+{
+	texture->LoadTextureFromFile(path, renderer, animationTilesCount, width, heigth);
+}
+void Card::ChangeShirtTexture(std::string path, SDL_Renderer* renderer, int animationTilesCount, int width, int heigth)
+{
+	shirtTexture->LoadTextureFromFile(path, renderer, animationTilesCount, width, heigth);
+}
+
 Suit Card::GetSuit()
 {
 	return suit;

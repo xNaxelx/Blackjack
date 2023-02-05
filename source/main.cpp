@@ -10,6 +10,7 @@
 #include "engine/UpdateSystem.h"
 #include "gameplay/SkinSystem.h"
 #include "gameplay/CardDeck.h"
+#include "engine/Button.h"
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 800;
@@ -102,9 +103,13 @@ int main(int argc, char* args[])
 	
 	Texture table;
 	table.LoadTextureFromFile("resource/table.png", renderer.get(), 1, SCREEN_WIDTH, SCREEN_HEIGHT);
-	Card::SetShirtTexture("resource/Card back textures/BackColor_Black.png", renderer.get(), 1, 188, 291);
 
-	CardDeck cardDeck(900, 100, *skinSystem.GetAllCardsVector(), &updateSystem);
+	CardDeck cardDeck(1000, 50, *skinSystem.GetAllCardsVector(), &updateSystem);
+	
+	Button changeSkinButton(50, 50, 1, 200, 80, "resource/CHANGE_SKIN.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeSkins, &skinSystem));
+	updateSystem.Attach(&changeSkinButton);
+	Button changeShirtSkinButton(50, 180, 1, 200, 80, "resource/CHANGE_SHIRT.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeShirtSkins, &skinSystem));
+	updateSystem.Attach(&changeShirtSkinButton);
 	//Card card(CARD_SUIT_CLUB, CARD_RANK_10, 0, 0, 1, 188, 291, "resource/Card texture packs/1/Club01.png", renderer.get(), &mainTimer);
 	//updateSystem.Attach(&card);
 	//card.MoveTo(400, 400);
@@ -118,6 +123,7 @@ int main(int argc, char* args[])
 		while (SDL_PollEvent(&event) != 0)
 		{
 			if (event.type == SDL_QUIT) { quit = true; }
+			updateSystem.NotifyHandleEvent(&event);
 			//if (event.button.state == SDL_PRESSED) { card.showShirt = !card.showShirt; }
 		}
 		mainTimer.UpdateTime();

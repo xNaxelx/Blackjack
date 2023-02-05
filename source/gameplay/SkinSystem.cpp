@@ -9,7 +9,9 @@ SkinSystem::SkinSystem(std::string pathToSkinDirectory, std::string pathToShirtS
 {
 	this->pathToSkinDirectory = pathToSkinDirectory;
 	this->pathToShirtSkinDirectory = pathToShirtSkinDirectory;
+	this->renderer = renderer;
 
+	Card::SetShirtTexture(pathToShirtSkinDirectory + "/" + curentShirtSkinID, renderer, 1, 188, 291);
 	LoadCards(renderer, timer);
 	
 	std::vector<Card*>::iterator iterator = allCards.begin();
@@ -23,50 +25,82 @@ std::vector<Card*>* SkinSystem::GetAllCardsVector()
 {
 	return &allCards;
 }
-
+#include <iostream>
 void SkinSystem::LoadCards(SDL_Renderer* renderer, Time* timer)
 {
 	allCards.resize(0);
 
-	allCards.push_back(new Card(CARD_SUIT_CLUB, CARD_RANK_ACE, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Club01.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_CLUB, CARD_RANK_6, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Club06.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_CLUB, CARD_RANK_7, -500, -500, 1, 188, 291, pathToSkinDirectory + "//1/Club07.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_CLUB, CARD_RANK_8, -500, -500, 1, 188, 291, pathToSkinDirectory + "//1/Club08.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_CLUB, CARD_RANK_9, -500, -500, 1, 188, 291, pathToSkinDirectory + "//1/Club09.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_CLUB, CARD_RANK_10, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Club10.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_CLUB, CARD_RANK_JACK, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Club11.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_CLUB, CARD_RANK_QUEEN, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Club12.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_CLUB, CARD_RANK_KING, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Club13.png", renderer, timer));
+	for (int suitID = 0; suitID < cardSuitNames.size(); suitID++)
+	{
+		for (int rankID = 0; rankID < cardRankNames.size(); rankID++)
+		{
+			allCards.push_back(new Card((Suit)(suitID + 1), (CardRank)(rankID + 1), -500, -500, 1, 188, 291, pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[suitID] + cardRankNames[rankID] + ".png", renderer, timer));
+		}
+	}	
+}
 
-	allCards.push_back(new Card(CARD_SUIT_DIAMOND, CARD_RANK_ACE, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Diamond01.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_DIAMOND, CARD_RANK_6, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Diamond06.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_DIAMOND, CARD_RANK_7, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Diamond07.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_DIAMOND, CARD_RANK_8, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Diamond08.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_DIAMOND, CARD_RANK_9, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Diamond09.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_DIAMOND, CARD_RANK_10, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Diamond10.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_DIAMOND, CARD_RANK_JACK, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Diamond11.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_DIAMOND, CARD_RANK_QUEEN, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Diamond12.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_DIAMOND, CARD_RANK_KING, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Diamond13.png", renderer, timer));
+void SkinSystem::ChangeSkins()
+{
+	int tempDirectoryCount = 0;
+	std::string tempDirectoryCountString;
+	for(boost::filesystem::directory_entry& entry : boost::filesystem::directory_iterator(pathToSkinDirectory));
+	{
+		tempDirectoryCount++;
+	}
+	tempDirectoryCountString = std::to_string(tempDirectoryCount);
+	boost::filesystem::directory_iterator iterator(pathToSkinDirectory);
+	for (boost::filesystem::directory_entry& entry : iterator) 
+	{
+		if (entry.path().filename().string() == currentSkinsID)
+		{
+			if (entry.path().filename().string() == tempDirectoryCountString)
+			{
+				iterator = boost::filesystem::directory_iterator(pathToSkinDirectory);
+				break;
+			}
+			else
+			{
+				iterator++;
+				break;
+			}
+		}
+	}
+	currentSkinsID = iterator->path().filename().string();
+	for (auto deckIterator : allCards)
+	{
+		std::cout << pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 1] + ".png" << std::endl;
+		deckIterator->ChangeSkinTexture(pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 1] + ".png", renderer, 1, 188, 291);
+	}
+}
+// for (directory_entry& x : directory_iterator(p)) { } 
+void SkinSystem::ChangeShirtSkins()
+{
+	int tempShirtCount = 0;
+	std::string tempShirtCountString;
+	for (boost::filesystem::directory_entry& entry : boost::filesystem::directory_iterator(pathToShirtSkinDirectory))
+	{
+		tempShirtCount++;
+	}
+	tempShirtCountString = std::to_string(tempShirtCount);
+	boost::filesystem::directory_iterator iterator(pathToShirtSkinDirectory);
+	for (boost::filesystem::directory_entry& entry : iterator)
+	{
+		if (entry.path().filename().string() == curentShirtSkinID)
+		{
+			if (entry.path().filename().string() == tempShirtCountString + ".png")
+			{
+				iterator = boost::filesystem::directory_iterator(pathToShirtSkinDirectory);
+				break;
+			}
+			else
+			{
+				iterator++;
+				break;
+			}
+		}
+	}
+	curentShirtSkinID = iterator->path().filename().string();
 
-	allCards.push_back(new Card(CARD_SUIT_HEART, CARD_RANK_ACE, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Heart01.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_HEART, CARD_RANK_6, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Heart06.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_HEART, CARD_RANK_7, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Heart07.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_HEART, CARD_RANK_8, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Heart08.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_HEART, CARD_RANK_9, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Heart09.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_HEART, CARD_RANK_10, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Heart10.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_HEART, CARD_RANK_JACK, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Heart11.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_HEART, CARD_RANK_QUEEN, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Heart12.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_HEART, CARD_RANK_KING, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Heart13.png", renderer, timer));
-
-	allCards.push_back(new Card(CARD_SUIT_SPADE, CARD_RANK_ACE, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Spade01.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_SPADE, CARD_RANK_6, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Spade06.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_SPADE, CARD_RANK_7, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Spade07.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_SPADE, CARD_RANK_8, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Spade08.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_SPADE, CARD_RANK_9, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Spade09.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_SPADE, CARD_RANK_10, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Spade10.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_SPADE, CARD_RANK_JACK, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Spade11.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_SPADE, CARD_RANK_QUEEN, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Spade12.png", renderer, timer));
-	allCards.push_back(new Card(CARD_SUIT_SPADE, CARD_RANK_KING, -500, -500, 1, 188, 291, pathToSkinDirectory + "/1/Spade13.png", renderer, timer));
-
-	
+	std::cout << pathToShirtSkinDirectory + "/" + curentShirtSkinID << std::endl;
+	Card::ChangeShirtTexture(pathToShirtSkinDirectory + "/" + curentShirtSkinID, renderer, 1, 188, 291);
 }
