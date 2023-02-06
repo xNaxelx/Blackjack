@@ -8,6 +8,8 @@ public:
     virtual void RenderTexture(SDL_Renderer* renderer) {};
     virtual void UpdateMove() {};
     virtual void HandleEvent(SDL_Event* event) {};
+
+    virtual void HandleTurnEnd(int participantID) {};
 };
 
 class ISubject {
@@ -17,4 +19,6 @@ public:
     virtual void NotifyUpdateTextures(SDL_Renderer* renderer) {};
     virtual void NotifyHandleEvent(SDL_Event* event) {};
     virtual void NotifyUpdateMove() {};
+
+    virtual void NotifyTurnEnd(int participantID) {};
 };

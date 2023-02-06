@@ -8,9 +8,32 @@ CardDeck::CardDeck(int positionX, int positionY, std::vector<Card*> allCards, Up
 	trashPosition.y = deckPosition.y + 500;
 
 	cardsInDeck = allCards;
-	std::vector<Card*>::iterator iterator = cardsInDeck.begin();
-	for (int i = 0; iterator != cardsInDeck.end(); iterator++, i++)
+	MixDeck();
+	for (auto card : cardsInDeck)
 	{
-		(*iterator)->SetPosition(deckPosition.x + i, deckPosition.y - i);
+		card->SetPosition(deckPosition.x, deckPosition.y);
 	}
+}
+
+Card* CardDeck::PickupCard(int x, int y)
+{
+	Card* temp = cardsInDeck.back();
+	cardsInDeck.pop_back();
+	temp->MoveTo(x, y);
+	temp->showShirt = false;
+	return temp;
+}
+
+void CardDeck::ThrowCardToTrash(Card* card)
+{
+	cardsInTrash.push_back(card);
+	card->MoveTo(trashPosition.x, trashPosition.y);
+}
+void CardDeck::MixDeck()
+{
+	/*std::random_device rd;
+	std::mt19937 g(rd());
+	std::shuffle(cardsInDeck.begin(), cardsInDeck.end(), g);*/
+
+	
 }

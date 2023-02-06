@@ -11,6 +11,8 @@
 #include "gameplay/SkinSystem.h"
 #include "gameplay/CardDeck.h"
 #include "engine/Button.h"
+#include "gameplay/Player.h"
+#include "gameplay/Croupier.h"
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 800;
@@ -106,14 +108,19 @@ int main(int argc, char* args[])
 
 	CardDeck cardDeck(1000, 50, *skinSystem.GetAllCardsVector(), &updateSystem);
 	
+	Player player(500, 450, renderer.get(), &mainTimer, &cardDeck, &updateSystem);
+	Croupier croupier(500, 50, renderer.get(), &mainTimer, &cardDeck, &updateSystem);
+
 	Button changeSkinButton(50, 50, 1, 200, 80, "resource/CHANGE_SKIN.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeSkins, &skinSystem));
 	updateSystem.Attach(&changeSkinButton);
 	Button changeShirtSkinButton(50, 180, 1, 200, 80, "resource/CHANGE_SHIRT.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeShirtSkins, &skinSystem));
 	updateSystem.Attach(&changeShirtSkinButton);
-	//Card card(CARD_SUIT_CLUB, CARD_RANK_10, 0, 0, 1, 188, 291, "resource/Card texture packs/1/Club01.png", renderer.get(), &mainTimer);
-	//updateSystem.Attach(&card);
-	//card.MoveTo(400, 400);
-	//card.speed = 1000;
+	Button HitButton(50, 450, 1, 200, 80, "resource/HIT.png", renderer.get(), &mainTimer, boost::bind(&Player::Hit, &player));
+	updateSystem.Attach(&HitButton);
+	Button StandButton(50, 580, 1, 200, 80, "resource/STAND.png", renderer.get(), &mainTimer, boost::bind(&Player::Stand, &player));
+	updateSystem.Attach(&StandButton);
+
+
 
 	bool quit = false;
 	SDL_Event event;

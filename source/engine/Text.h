@@ -8,6 +8,7 @@
 class Text : public Texture, public IObserver
 {
 public:
+	Text();
 	Text(const char* file, int ptsize, int x, int y, std::string text, SDL_Renderer* renderer);
 
 	void RenderTexture(SDL_Renderer* renderer);

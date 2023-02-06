@@ -144,6 +144,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\gameplay\Participant.cpp" />
+    <ClCompile Include="source\gameplay\Croupier.cpp" />
+    <ClCompile Include="source\gameplay\Player.cpp" />
     <ClCompile Include="source\engine\Button.cpp" />
     <ClCompile Include="source\gameplay\GameSystem.cpp" />
     <ClCompile Include="source\gameplay\SkinSystem.cpp" />
@@ -158,6 +161,9 @@
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\gameplay\Participant.h" />
+    <ClInclude Include="source\gameplay\Croupier.h" />
+    <ClInclude Include="source\gameplay\Player.h" />
     <ClInclude Include="source\engine\Button.h" />
     <ClInclude Include="source\gameplay\GameSystem.h" />
     <ClInclude Include="source\gameplay\SkinSystem.h" />

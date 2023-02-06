@@ -34,7 +34,14 @@ void SkinSystem::LoadCards(SDL_Renderer* renderer, Time* timer)
 	{
 		for (int rankID = 0; rankID < cardRankNames.size(); rankID++)
 		{
-			allCards.push_back(new Card((Suit)(suitID + 1), (CardRank)(rankID + 1), -500, -500, 1, 188, 291, pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[suitID] + cardRankNames[rankID] + ".png", renderer, timer));
+			if (rankID == 0) 
+			{
+				allCards.push_back(new Card((Suit)(suitID + 1), (CardRank)(rankID + 1), -500, -500, 1, 188, 291, pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[suitID] + cardRankNames[rankID] + ".png", renderer, timer));
+			}
+			else if (rankID > 0)
+			{
+				allCards.push_back(new Card((Suit)(suitID + 1), (CardRank)(rankID + 5), -500, -500, 1, 188, 291, pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[suitID] + cardRankNames[rankID] + ".png", renderer, timer));
+			}
 		}
 	}	
 }
@@ -68,8 +75,16 @@ void SkinSystem::ChangeSkins()
 	currentSkinsID = iterator->path().filename().string();
 	for (auto deckIterator : allCards)
 	{
-		std::cout << pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 1] + ".png" << std::endl;
-		deckIterator->ChangeSkinTexture(pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 1] + ".png", renderer, 1, 188, 291);
+		if (deckIterator->GetRank() == 1)
+		{
+			std::cout << pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 1] + ".png" << std::endl;
+			deckIterator->ChangeSkinTexture(pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 1] + ".png", renderer, 1, 188, 291);
+		}
+		else if (deckIterator->GetRank() > 6)
+		{
+			std::cout << pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 5] + ".png" << std::endl;
+			deckIterator->ChangeSkinTexture(pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 5] + ".png", renderer, 1, 188, 291);
+		}
 	}
 }
 // for (directory_entry& x : directory_iterator(p)) { } 

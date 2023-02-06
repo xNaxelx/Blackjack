@@ -17,9 +17,15 @@ GameObject::GameObject(int x, int y, int animFramesCount, int width, int height,
 	transform.w = width;
 	transform.h = height;
 
+	this->timer = timer;
+
+	if (texturePath == "\0")
+	{
+		return;
+	}
 	texture = new Texture();
 	texture->LoadTextureFromFile(texturePath, renderer, animFramesCount, width, height);
-	this->timer = timer;
+	
 }
 
 GameObject::~GameObject()

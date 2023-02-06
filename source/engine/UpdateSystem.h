@@ -11,6 +11,8 @@ public:
     void NotifyUpdateTextures(SDL_Renderer* renderer) final;
     void NotifyHandleEvent(SDL_Event* event) final;
     void NotifyUpdateMove() final;
+
+    void NotifyTurnEnd(int participantID) final;
 private:
     std::list<IObserver*> list_observer;
     SDL_Renderer* renderer;

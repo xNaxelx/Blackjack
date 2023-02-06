@@ -39,3 +39,13 @@ void UpdateSystem::NotifyUpdateMove()
         ++iterator;
     }
 }
+
+void UpdateSystem::NotifyTurnEnd(int participantID) // Croupier = 0, Player = 1
+{
+    std::list<IObserver*>::iterator iterator = list_observer.begin();
+    while (iterator != list_observer.end())
+    {
+        (*iterator)->HandleTurnEnd(participantID);
+        ++iterator;
+    }
+}

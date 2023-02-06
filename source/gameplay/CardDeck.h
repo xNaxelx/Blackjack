@@ -1,7 +1,9 @@
 #pragma once
 #include "../gameplay/Card.h"
 #include "../engine/UpdateSystem.h"
-#include "vector"
+#include <vector>
+#include <algorithm>
+#include <random>
 
 
 class CardDeck
@@ -10,7 +12,8 @@ public:
 	CardDeck(int positionX, int positionY, std::vector<Card*> allCards, UpdateSystem* updateSystem);
 	SDL_Rect GetPosition();
 
-	void PickupCard();
+	Card* PickupCard(int x, int y);
+	void ThrowCardToTrash(Card* card);
 	void MixDeck();
 	void RestoreDeck();
 
