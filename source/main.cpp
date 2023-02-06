@@ -13,6 +13,8 @@
 #include "engine/Button.h"
 #include "gameplay/Player.h"
 #include "gameplay/Croupier.h"
+#include "gameplay/GameSystem.h"
+
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 800;
@@ -24,6 +26,7 @@ TTF_Font* font = NULL;
 Time mainTimer;
 UpdateSystem updateSystem;
 SkinSystem skinSystem;
+GameSystem gameSystem;
 
 bool Init()
 {
@@ -106,20 +109,30 @@ int main(int argc, char* args[])
 	Texture table;
 	table.LoadTextureFromFile("resource/table.png", renderer.get(), 1, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	CardDeck cardDeck(1000, 50, *skinSystem.GetAllCardsVector(), &updateSystem);
+	CardDeck cardDeck(1050, 50, *skinSystem.GetAllCardsVector(), &updateSystem);
 	
-	Player player(500, 450, renderer.get(), &mainTimer, &cardDeck, &updateSystem);
-	Croupier croupier(500, 50, renderer.get(), &mainTimer, &cardDeck, &updateSystem);
+	Player player(380, 450, renderer.get(), &mainTimer, &cardDeck, &updateSystem);
+	Croupier croupier(380, 50, renderer.get(), &mainTimer, &cardDeck, &updateSystem);
 
 	Button changeSkinButton(50, 50, 1, 200, 80, "resource/CHANGE_SKIN.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeSkins, &skinSystem));
 	updateSystem.Attach(&changeSkinButton);
 	Button changeShirtSkinButton(50, 180, 1, 200, 80, "resource/CHANGE_SHIRT.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeShirtSkins, &skinSystem));
 	updateSystem.Attach(&changeShirtSkinButton);
-	Button HitButton(50, 450, 1, 200, 80, "resource/HIT.png", renderer.get(), &mainTimer, boost::bind(&Player::Hit, &player));
-	updateSystem.Attach(&HitButton);
-	Button StandButton(50, 580, 1, 200, 80, "resource/STAND.png", renderer.get(), &mainTimer, boost::bind(&Player::Stand, &player));
-	updateSystem.Attach(&StandButton);
+	Button hitButton(50, 310, 1, 200, 80, "resource/HIT.png", renderer.get(), &mainTimer, boost::bind(&Player::Hit, &player));
+	updateSystem.Attach(&hitButton);
+	Button standButton(50, 440, 1, 200, 80, "resource/STAND.png", renderer.get(), &mainTimer, boost::bind(&Player::Stand, &player));
+	updateSystem.Attach(&standButton);
+	Button betButton(50, 570, 1, 200, 80, "resource/BET.png", renderer.get(), &mainTimer, boost::bind(&Player::Bet, &player));
+	updateSystem.Attach(&betButton);
+	Button increaseBet10(50, 700, 1, 95, 80, "resource/+10.png", renderer.get(), &mainTimer, boost::bind(&Player::BetIncrease10, &player));
+	updateSystem.Attach(&increaseBet10);
+	Button decreaseBet10(155, 700, 1, 95, 80, "resource/-10.png", renderer.get(), & mainTimer, boost::bind(&Player::BetDecrease10, &player));
+	updateSystem.Attach(&decreaseBet10);
 
+	Button continueButton(0, 0, 1, SCREEN_WIDTH, SCREEN_HEIGHT, "\0", renderer.get(), &mainTimer, NULL);
+	updateSystem.Attach(&continueButton);
+	gameSystem = GameSystem(&player, &croupier, &continueButton);
+	continueButton.buttonFunctional = boost::bind(&GameSystem::ButtonFunctional, &gameSystem);
 
 
 	bool quit = false;
@@ -134,7 +147,7 @@ int main(int argc, char* args[])
 			//if (event.button.state == SDL_PRESSED) { card.showShirt = !card.showShirt; }
 		}
 		mainTimer.UpdateTime();
-
+		gameSystem.CheckIfPlayerFinish();
 
 		SDL_SetRenderDrawColor(renderer.get(), 0x0, 0x0, 0x0, 0xFF);
 		SDL_RenderClear(renderer.get());

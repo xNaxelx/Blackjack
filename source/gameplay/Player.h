@@ -14,6 +14,8 @@ public:
 	
 	void Win();
 	void Lose();
+
+	void NewRound();
 private:
 	void ChangeBet(int changeSize);
 

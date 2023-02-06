@@ -12,7 +12,7 @@ enum Suit
 
 enum CardRank 
 {
-	RANK_NOT_INITIALISED = 0,
+	RANK_NOT_INITIALISED = -1,
 	CARD_RANK_ACE = 1,
 	CARD_RANK_6 = 6,
 	CARD_RANK_7 = 7,

@@ -11,12 +11,15 @@ class Participant : public GameObject
 {
 public:
 	Participant(int x, int y, SDL_Renderer* renderer, Time* timer, CardDeck* deck, UpdateSystem* updateSystem);
+
+	int GetScore();
+
 	void Hit();
 	void Stand();
 	
 	bool isFinishHitting = false, permisionToTurn = false;
 protected:
-	void ChangeScore(int score);
+	void ChangeScore(CardRank rank);
 
 	SDL_Renderer* renderer;
 	UpdateSystem* updateSystem;

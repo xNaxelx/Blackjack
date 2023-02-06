@@ -1,11 +1,12 @@
 #include "CardDeck.h"
 
+
 CardDeck::CardDeck(int positionX, int positionY, std::vector<Card*> allCards, UpdateSystem* updateSystem)
 {
 	deckPosition.x = positionX;
 	deckPosition.y = positionY;
 	trashPosition.x = deckPosition.x;
-	trashPosition.y = deckPosition.y + 500;
+	trashPosition.y = deckPosition.y + 400;
 
 	cardsInDeck = allCards;
 	MixDeck();
@@ -17,10 +18,13 @@ CardDeck::CardDeck(int positionX, int positionY, std::vector<Card*> allCards, Up
 
 Card* CardDeck::PickupCard(int x, int y)
 {
+	if (cardsInDeck.empty())
+	{
+		RestoreDeck();
+	}
 	Card* temp = cardsInDeck.back();
-	cardsInDeck.pop_back();
 	temp->MoveTo(x, y);
-	temp->showShirt = false;
+	cardsInDeck.pop_back();
 	return temp;
 }
 
@@ -28,12 +32,22 @@ void CardDeck::ThrowCardToTrash(Card* card)
 {
 	cardsInTrash.push_back(card);
 	card->MoveTo(trashPosition.x, trashPosition.y);
+	card->showShirt = false;
 }
+
 void CardDeck::MixDeck()
 {
-	/*std::random_device rd;
-	std::mt19937 g(rd());
-	std::shuffle(cardsInDeck.begin(), cardsInDeck.end(), g);*/
-
+	std::shuffle(cardsInDeck.begin(), cardsInDeck.end(), std::mt19937{ std::random_device{}() });
 	
+}
+
+void CardDeck::RestoreDeck()
+{
+	for (Card* card : cardsInTrash)
+	{
+		card->MoveTo(deckPosition.x, deckPosition.y);
+		cardsInDeck.push_back(card);
+		card->showShirt = true;
+	}
+	cardsInTrash.clear();
 }

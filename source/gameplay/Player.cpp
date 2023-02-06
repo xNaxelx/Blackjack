@@ -7,18 +7,27 @@ Player::Player(int x, int y, SDL_Renderer* renderer, Time* timer, CardDeck* deck
 	isFinishHitting = false;
 	permisionToTurn = true;
 
-	balanceText = new Text("resource/Font/Mona-Sans.ttf", 24, transform.x - 400, transform.y, std::to_string(balance), renderer);
-	betSizeText = new Text("resource/Font/Mona-Sans.ttf", 24, transform.x - 400, transform.y - 100, std::to_string(betSize), renderer);
+	balanceText = new Text("resource/Font/Mona-Sans.ttf", 24, transform.x - 100, transform.y + 100, std::to_string(balance), renderer);
+	betSizeText = new Text("resource/Font/Mona-Sans.ttf", 24, transform.x - 100, transform.y + 150, std::to_string(betSize), renderer);
 	updateSystem->Attach(balanceText);
 	updateSystem->Attach(betSizeText);
 
 	Hit();
 	Hit();
+
+	permisionToTurn = false;
 }
 
 void Player::Bet()
 {
+	if (isFinishHitting == true || permisionToTurn == true)
+	{
+		return;
+	}
 	betAccepted = true;
+	permisionToTurn = true;
+
+	printf("Bet\n");
 }
 void Player::BetIncrease10()
 {
@@ -43,8 +52,7 @@ void Player::ChangeBet(int changeSize)
 void Player::Win()
 {
 	balance += betSize;
-	isFinishHitting = false;
-	permisionToTurn = true;
+	balanceText->ChangeText(std::to_string(balance), renderer);
 }
 
 void Player::Lose()
@@ -54,6 +62,24 @@ void Player::Lose()
 	{
 		return;
 	}
+	balanceText->ChangeText(std::to_string(balance), renderer);
+}
+
+void Player::NewRound()
+{
 	isFinishHitting = false;
 	permisionToTurn = true;
+
+	for (Card* card : cards)
+	{
+		deck->ThrowCardToTrash(card);
+	}
+	cards.clear();
+	scoreInt = 0;
+
+	Hit();
+	Hit();
+
+	permisionToTurn = false;
+	betAccepted = false;
 }

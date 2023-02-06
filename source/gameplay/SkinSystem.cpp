@@ -80,7 +80,7 @@ void SkinSystem::ChangeSkins()
 			std::cout << pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 1] + ".png" << std::endl;
 			deckIterator->ChangeSkinTexture(pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 1] + ".png", renderer, 1, 188, 291);
 		}
-		else if (deckIterator->GetRank() > 6)
+		else if (deckIterator->GetRank() >= 6)
 		{
 			std::cout << pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 5] + ".png" << std::endl;
 			deckIterator->ChangeSkinTexture(pathToSkinDirectory + "/" + currentSkinsID + "/" + cardSuitNames[deckIterator->GetSuit() - 1] + cardRankNames[deckIterator->GetRank() - 5] + ".png", renderer, 1, 188, 291);
