@@ -14,6 +14,7 @@
 #include "gameplay/Player.h"
 #include "gameplay/Croupier.h"
 #include "gameplay/GameSystem.h"
+#include "engine/AudioMixer.h"
 
 
 const int SCREEN_WIDTH = 1280;
@@ -25,6 +26,7 @@ TTF_Font* font = NULL;
 
 Time mainTimer;
 UpdateSystem updateSystem;
+AudioMixer* buttonSound;
 SkinSystem skinSystem;
 GameSystem gameSystem;
 
@@ -75,6 +77,7 @@ bool Init()
 	}
 
 	mainTimer.InitTime();
+	buttonSound = new AudioMixer("resource/button.wav");
 	skinSystem = SkinSystem("resource/Card texture packs", "resource/Card back textures", renderer.get(), &mainTimer, &updateSystem);
 
 	return true;
@@ -114,22 +117,22 @@ int main(int argc, char* args[])
 	Player player(380, 450, renderer.get(), &mainTimer, &cardDeck, &updateSystem);
 	Croupier croupier(380, 50, renderer.get(), &mainTimer, &cardDeck, &updateSystem);
 
-	Button changeSkinButton(50, 50, 1, 200, 80, "resource/CHANGE_SKIN.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeSkins, &skinSystem));
+	Button changeSkinButton(50, 50, 1, 200, 80, "resource/CHANGE_SKIN.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeSkins, &skinSystem), buttonSound);
 	updateSystem.Attach(&changeSkinButton);
-	Button changeShirtSkinButton(50, 180, 1, 200, 80, "resource/CHANGE_SHIRT.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeShirtSkins, &skinSystem));
+	Button changeShirtSkinButton(50, 180, 1, 200, 80, "resource/CHANGE_SHIRT.png", renderer.get(), &mainTimer, boost::bind(&SkinSystem::ChangeShirtSkins, &skinSystem), buttonSound);
 	updateSystem.Attach(&changeShirtSkinButton);
-	Button hitButton(50, 310, 1, 200, 80, "resource/HIT.png", renderer.get(), &mainTimer, boost::bind(&Player::Hit, &player));
+	Button hitButton(50, 310, 1, 200, 80, "resource/HIT.png", renderer.get(), &mainTimer, boost::bind(&Player::Hit, &player), buttonSound);
 	updateSystem.Attach(&hitButton);
-	Button standButton(50, 440, 1, 200, 80, "resource/STAND.png", renderer.get(), &mainTimer, boost::bind(&Player::Stand, &player));
+	Button standButton(50, 440, 1, 200, 80, "resource/STAND.png", renderer.get(), &mainTimer, boost::bind(&Player::Stand, &player), buttonSound);
 	updateSystem.Attach(&standButton);
-	Button betButton(50, 570, 1, 200, 80, "resource/BET.png", renderer.get(), &mainTimer, boost::bind(&Player::Bet, &player));
+	Button betButton(50, 570, 1, 200, 80, "resource/BET.png", renderer.get(), &mainTimer, boost::bind(&Player::Bet, &player), buttonSound);
 	updateSystem.Attach(&betButton);
-	Button increaseBet10(50, 700, 1, 95, 80, "resource/+10.png", renderer.get(), &mainTimer, boost::bind(&Player::BetIncrease10, &player));
+	Button increaseBet10(50, 700, 1, 95, 80, "resource/+10.png", renderer.get(), &mainTimer, boost::bind(&Player::BetIncrease10, &player), buttonSound);
 	updateSystem.Attach(&increaseBet10);
-	Button decreaseBet10(155, 700, 1, 95, 80, "resource/-10.png", renderer.get(), & mainTimer, boost::bind(&Player::BetDecrease10, &player));
+	Button decreaseBet10(155, 700, 1, 95, 80, "resource/-10.png", renderer.get(), & mainTimer, boost::bind(&Player::BetDecrease10, &player), buttonSound);
 	updateSystem.Attach(&decreaseBet10);
 
-	Button continueButton(0, 0, 1, SCREEN_WIDTH, SCREEN_HEIGHT, "\0", renderer.get(), &mainTimer, NULL);
+	Button continueButton(0, 0, 1, SCREEN_WIDTH, SCREEN_HEIGHT, "\0", renderer.get(), &mainTimer, NULL, buttonSound);
 	updateSystem.Attach(&continueButton);
 	gameSystem = GameSystem(&player, &croupier, &continueButton);
 	continueButton.buttonFunctional = boost::bind(&GameSystem::ButtonFunctional, &gameSystem);

@@ -1,9 +1,10 @@
 #include "Button.h"
 
-Button::Button(int x, int y, int animFramesCount, int width, int height, std::string texturePath, SDL_Renderer* renderer, Time* timer, boost::function<void()> buttonFunctional)
+Button::Button(int x, int y, int animFramesCount, int width, int height, std::string texturePath, SDL_Renderer* renderer, Time* timer, boost::function<void()> buttonFunctional, AudioMixer* sound)
 	: GameObject(x, y, animFramesCount, width, height, texturePath, renderer, timer)
 {
 	this->buttonFunctional = buttonFunctional;
+	this->sound = sound;
 }
 
 void Button::HandleEvent(SDL_Event* event)
@@ -15,6 +16,10 @@ void Button::HandleEvent(SDL_Event* event)
 			isHiden == false)
 		{
 			buttonFunctional();
+			if (sound != NULL)
+			{
+				sound->PlaySound(sound->loadedSound);
+			}
 		}
 	}
 }

@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\engine\AudioMixer.cpp" />
     <ClCompile Include="source\gameplay\Participant.cpp" />
     <ClCompile Include="source\gameplay\Croupier.cpp" />
     <ClCompile Include="source\gameplay\Player.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\engine\AudioMixer.h" />
     <ClInclude Include="source\gameplay\Participant.h" />
     <ClInclude Include="source\gameplay\Croupier.h" />
     <ClInclude Include="source\gameplay\Player.h" />
