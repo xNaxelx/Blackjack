@@ -1,7 +1,7 @@
 set(CMAKE_TOOLCHAIN_FILE "C:/Program Files/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
-set(CMAKE_GENERATOR_PLATFORM "Win32")
-set(VCPKG_TARGET_TRIPLET "x86-windows")
+set(CMAKE_GENERATOR_PLATFORM "x64")
+set(VCPKG_TARGET_TRIPLET "x64-windows")
 
 cmake_minimum_required(VERSION 3.27.0)
 project(BlackJack)
